@@ -27,25 +27,38 @@ fi
 nbfiles=$(find wordpress/ -type f | wc -l)
 echo "WORDPRESS: $nbfiles files in clean install of WP (Jan 2020: 1930 files)"
 
+find_suspects(){
+	# $1 = folder
+	# $2 = nb of examples to give
+	### what we are trying to detect:
+	##  var pl = String.fromCharCode(104,116,116,112,115,58,47,47,115,110,105,112,112,101,116,46,97,100,115,102,111,114,109,97,114,107,101,116,46,99,111,109,47,115,97,109,101,46,106,115,63,118,61,51); s.src=pl; 
+	pattern="String.fromCharCode(104,116,116,112"
+	nbsuspect=$(grep -rl "$pattern" "$1" | wc -l)
+	if [[ "$2" -gt 0 ]] ; then
+		grep -rl "$pattern" "$1" | head -$2 >&2
+	fi
+	echo $nbsuspect
+}
+
 overwrite(){
 	nbsource=$(find "$1" -type f | wc -l)
 	bname=$(basename $1)
 	destin="$2/$bname"
-	nbinfected=$(grep -rl "String.fromCharCode" "$destin" | wc -l)
+	nbinfected=$(find_suspects "$destin")
 	if [[ $nbinfected -gt 0 ]] ; then
 		echo " ! found $nbinfected suspect files in [$(basename $1)]"
 		echo " - $nbsource files in clean source"
 		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 		echo " - $nbrsync files written [$1] >> [$2]"
-		nbinfected2=$(grep -rl "String.fromCharCode" "$destin" | wc -l)
+		nbinfected2=$(find_suspects "$destin" 4)
 		if [[ $nbinfected2 -gt 0 ]] ; then
 			echo " ! found $nbinfected2 suspect files after reinstall"
-			grep -rl "String.fromCharCode" "$destin" | head -4
 		else
-			echo " v no more suspect files after update"
+			echo " . no more suspect files after update"
 		fi
 	fi
 }
+
 
 find "$1" -type f -name wp-config.php 2> /dev/null \
 | while read line ; do
@@ -53,7 +66,7 @@ find "$1" -type f -name wp-config.php 2> /dev/null \
 	echo "## FOLDER $WPROOT"
 	overwrite "wordpress/wp-admin"	"$WPROOT/"
 	overwrite "wordpress/wp-includes"	"$WPROOT/"
-	#overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
-	#overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
+	overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
+	overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
 done
 
