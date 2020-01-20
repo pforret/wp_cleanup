@@ -38,7 +38,12 @@ overwrite(){
 		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 		echo " - $nbrsync files written [$1] >> [$2]"
 		nbinfected2=$(grep -rl "String.fromCharCode" "$destin" | wc -l)
-		echo " ! found $nbinfected2 suspect files after reinstall"
+		if [[ $nbinfected2 -gt 0 ]] ; then
+			echo " ! found $nbinfected2 suspect files after reinstall"
+			grep -rl "String.fromCharCode" "$destin" | head -4
+		else
+			echo " v no more suspect files after update"
+		fi
 	fi
 }
 
