@@ -1,0 +1,6 @@
+latest.zip
+wordpress/*
+*.tmp
+temp/
+tmp/
+cache/
