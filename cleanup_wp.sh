@@ -29,13 +29,15 @@ echo "WORDPRESS: $nbfiles files in clean install of WP (Jan 2020: 1930 files)"
 
 overwrite(){
 	nbsource=$(find "$1" -type f | wc -l)
-	nbinfected=$(grep -rl "String.fromCharCode" "$2" | wc -l)
+	bname=$(basename $1)
+	destin="$2/$bname"
+	nbinfected=$(grep -rl "String.fromCharCode" "$destin" | wc -l)
 	if [[ $nbinfected -gt 0 ]] ; then
 		echo " ! found $nbinfected suspect files in [$(basename $1)]"
 		echo " - $nbsource files in clean source"
 		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 		echo " - $nbrsync files written [$1] >> [$2]"
-		nbinfected2=$(grep -rl "String.fromCharCode" "$2" | wc -l)
+		nbinfected2=$(grep -rl "String.fromCharCode" "$destin" | wc -l)
 		echo " ! found $nbinfected2 suspect files after reinstall"
 	fi
 }
