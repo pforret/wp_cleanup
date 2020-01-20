@@ -59,7 +59,7 @@ find_suspects(){
 	pattern="s.src=pl;"
 	nbsuspect=$(grep -rl "$pattern" "$1" | wc -l)
 	if [[ "$2" -gt 0 ]] ; then
-		grep -rl "$pattern" "$1" | head -$2 >&2
+		grep -rl --include \*.js "$pattern" "$1" | head -$2 >&2
 	fi
 	echo $nbsuspect
 }
