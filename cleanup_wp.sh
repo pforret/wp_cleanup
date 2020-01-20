@@ -25,17 +25,18 @@ if [[ ! -f "wordpress/wp-config-sample.php" ]] ; then
 	fi
 fi
 nbfiles=$(find wordpress/ -type f | wc -l)
-echo "WORDPRESS: $nbunzip files in clean install of WP (Jan 2020: 1930 files)"
+echo "WORDPRESS: $nbfiles files in clean install of WP (Jan 2020: 1930 files)"
 
 overwrite(){
 	nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 	echo "COPY: $nbrsync files written to [$2]"
 }
 
-for WP in $(find "$1" -type f -name wp-config.php) ; do
-	WPROOT=$(dirname "$WP")
+find "$1" -type f -name wp-config.php 2> /dev/null \
+| while read line ; do
+	WPROOT=$(dirname "$line")
 	echo "## FOLDER $WPROOT"
-	#overwrite "wordpress/wp-admin"	"$WPROOT/"
+	overwrite "wordpress/wp-admin"	"$WPROOT/"
 	#overwrite "wordpress/wp-includes"	"$WPROOT/"
 	#overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
 	#overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
