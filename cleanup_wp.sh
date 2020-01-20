@@ -23,8 +23,9 @@ if [[ ! -f "wordpress/wp-config-sample.php" ]] ; then
 		echo "Unzip did not work. Are you sure you have write permission in this folder [$(pwd)]?"
 		exit 1
 	fi
-	echo "UNZIP: $nbunzip files in clean install of WP (Jan 2020: 1931 files)"
 fi
+nbfiles=$(find wordpress/ -type f | wc -l)
+echo "WORDPRESS: $nbunzip files in clean install of WP (Jan 2020: 1930 files)"
 
 overwrite(){
 	nbrsync=$(rsync -rva "$1" "$2" | wc -l)
