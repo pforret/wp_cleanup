@@ -8,26 +8,23 @@ if [[ "$1" == "" ]] ; then
 	exit 0
 fi
 
-STARTDIR=$(pwd)
-
 if [[ ! -f "wordpress/wp-config-sample.php" ]] ; then
-	echo "First download clean install version of Wordpress"
 	WP_URL="https://wordpress.org/latest.zip"
 	WP_ZIP=$(basename $WP_URL)
+	echo "DOWNLOAD: clean install version of Wordpress: $WP_URL"
 	wget -q $WP_URL
-	if [[ -f $WP_ZIP ]] ; then
-		du -h $WP_ZIP
-		nbunzip=$(unzip $WP_ZIP | wc -l)
-		echo "$nbunzip files in clean install of WP"
-	else
+	if [[ ! -f $WP_ZIP ]] ;  then
 		echo "Download did not work. Are you sure you have write perlission in this folder [$(pwd)]?"
 		exit 1
 	fi
+	du -h $WP_ZIP
+	nbunzip=$(unzip $WP_ZIP | wc -l)
+	echo "UNZIP: $nbunzip files in clean install of WP"
 fi
 
 overwrite(){
 	nbrsync=$(rsync -rva "$1" "$2" | wc -l)
-	echo "$nbrsync files written to [$2]"
+	echo "COPY: $nbrsync files written to [$2]"
 }
 
 for WP in $(find "$1" -type f -name wp-config.php) ; do
