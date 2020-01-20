@@ -28,8 +28,14 @@ nbfiles=$(find wordpress/ -type f | wc -l)
 echo "WORDPRESS: $nbfiles files in clean install of WP (Jan 2020: 1930 files)"
 
 overwrite(){
-	nbrsync=$(rsync -rva "$1" "$2" | wc -l)
-	echo "COPY: $nbrsync files written to [$2]"
+	nbsource=$(find "$1" -type f | wc -l)
+	nbinfected=$(grep -rl "String.fromCharCode" "$2")
+	if [[ $nbinfected -gt 0 ]] ; then
+		echo " ! found $nbinfected suspect files in [$(basename $1)]"
+		echo " - $nbsource files in clean source]"
+		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
+		echo " - $nbrsync files written [$1] >> [$2]"
+	fi
 }
 
 find "$1" -type f -name wp-config.php 2> /dev/null \
@@ -37,7 +43,7 @@ find "$1" -type f -name wp-config.php 2> /dev/null \
 	WPROOT=$(dirname "$line")
 	echo "## FOLDER $WPROOT"
 	overwrite "wordpress/wp-admin"	"$WPROOT/"
-	#overwrite "wordpress/wp-includes"	"$WPROOT/"
+	overwrite "wordpress/wp-includes"	"$WPROOT/"
 	#overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
 	#overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
 done
