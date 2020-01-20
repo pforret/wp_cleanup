@@ -32,9 +32,11 @@ overwrite(){
 	nbinfected=$(grep -rl "String.fromCharCode" "$2" | wc -l)
 	if [[ $nbinfected -gt 0 ]] ; then
 		echo " ! found $nbinfected suspect files in [$(basename $1)]"
-		echo " - $nbsource files in clean source]"
+		echo " - $nbsource files in clean source"
 		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 		echo " - $nbrsync files written [$1] >> [$2]"
+		nbinfected2=$(grep -rl "String.fromCharCode" "$2" | wc -l)
+		echo " ! found $nbinfected2 suspect files after reinstall"
 	fi
 }
 
