@@ -14,12 +14,16 @@ if [[ ! -f "wordpress/wp-config-sample.php" ]] ; then
 	echo "DOWNLOAD: clean install version of Wordpress: $WP_URL"
 	wget -q $WP_URL
 	if [[ ! -f $WP_ZIP ]] ;  then
-		echo "Download did not work. Are you sure you have write perlission in this folder [$(pwd)]?"
+		echo "Download did not work. Are you sure you have write permission in this folder [$(pwd)]?"
 		exit 1
 	fi
 	du -h $WP_ZIP
 	nbunzip=$(unzip $WP_ZIP | wc -l)
-	echo "UNZIP: $nbunzip files in clean install of WP"
+	if [[ ! -f "wordpress/wp-config-sample.php" ]] ;  then
+		echo "Unzip did not work. Are you sure you have write permission in this folder [$(pwd)]?"
+		exit 1
+	fi
+	echo "UNZIP: $nbunzip files in clean install of WP (Jan 2020: 1931 files)"
 fi
 
 overwrite(){
@@ -30,9 +34,9 @@ overwrite(){
 for WP in $(find "$1" -type f -name wp-config.php) ; do
 	WPROOT=$(dirname "$WP")
 	echo "## FOLDER $WPROOT"
-	overwrite "wordpress/wp-admin"	"$WPROOT/"
-	overwrite "wordpress/wp-includes"	"$WPROOT/"
-	overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
-	overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
+	#overwrite "wordpress/wp-admin"	"$WPROOT/"
+	#overwrite "wordpress/wp-includes"	"$WPROOT/"
+	#overwrite "wordpress/wp-content/themes"	"$WPROOT/wp-content/"
+	#overwrite "wordpress/wp-content/plugins/akismet"	"$WPROOT/wp-content/plugins/"
 done
 
