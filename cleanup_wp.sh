@@ -10,7 +10,7 @@ fi
 
 MODE="soft"
 force=0
-if [[ "$2" == "hard" -o "$2" == "HARD" ]] ; then
+if [[ "$2" == "hard" || "$2" == "HARD" ]] ; then
 	MODE="hard"
 	force=1
 fi
@@ -64,7 +64,7 @@ overwrite_folder(){
 	bname=$(basename "$1")
 	destin="$2/$bname"
 	nbinfected=$(find_suspects "$destin")
-	if [[ $MODE == "force" -o $nbinfected -gt 0 ]] ; then
+	if [[ $MODE == "force" || $nbinfected -gt 0 ]] ; then
 		echo ". overwrite [$destin] with fresh WP files"
 		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 		echo ". $nbrsync files overwritten!"
@@ -79,12 +79,12 @@ replace_folder(){
 	destin="$2/$bname"
 	nbinfected=$(find_suspects "$destin")
 	# move existing folder to new, unused name
-	if [[ -d "$destin" -a ! -d "${destin}-hacked" ]] ; then
+	if [[ -d "$destin" && ! -d "${destin}-hacked" ]] ; then
 		echo ". move hacked files to [${destin}-hacked]"
 		mv "$destin" "${destin}-hacked"
 	fi
 	# write folder with clean, original files
-	if [[ $MODE == "force" -o $nbinfected -gt 0 ]] ; then
+	if [[ $MODE == "force" || $nbinfected -gt 0 ]] ; then
 		echo ". replace [$destin] with fresh WP files"
 		nbrsync=$(rsync -rva "$1" "$2" | wc -l)
 		echo ". $nbrsync files written!"
