@@ -23,7 +23,7 @@ remove_from_file(){
 
   size1=$(wc -c $orig_file | cut -d' ' -f1)
 
-  < "$orig_file" sed 's|$2||g' > "$temp_file"
+  < "$orig_file" sed "s|$2||g" > "$temp_file"
 
   size2=$(wc -c $temp_file | cut -d' ' -f1)
 
