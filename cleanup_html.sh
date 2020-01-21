@@ -10,6 +10,29 @@ if [[ "$1" == "" ]] ; then
   exit 0
 fi
 
+remove_from_file(){
+  # $1 = file
+  # $2 = pattern
+  orig_file="$1"
+  temp_file="$1.tmp"
+  old_file="$1.hacked"
+
+  size1=$(wc -c $orig_file | cut -d' ' -f1)
+
+  < "$orig_file" sed "s|$2||g" > "$temp_file"
+
+  size2=$(wc -c $temp_file | cut -d' ' -f1)
+
+  if [[ $size1 -ne $size2 ]] ; then
+    # replace by cleaned version
+    mv "$orig_file" "$old_file"
+    mv "$temp_file" "$orig_file"
+  else
+  # undo  cleanup
+    rm "$temp_file"
+  fi
+}
+
 
 STARTDIR=$(pwd)
 pushd $1
@@ -28,27 +51,9 @@ for SITE in $(cat $SITES) ; do
   fi
   NBHACKED=$(wc -l $INFECTED | cut -d' ' -f1)
   if [[ $NBHACKED -gt 0 ]] ; then
-    echo "found: $SITE:   $NBHACKED files!"
-    for LINE in $(cat $INFECTED) ; do
-      FILE="$LINE"
-      TFILE="$LINE.tmp"
-      OFILE="$LINE.hacked"
-
-      ISIZE=$(wc -c $FILE | cut -d' ' -f1)
-      < "$FILE" \
-        sed 's|$PATTERN||g' \
-        > "$TFILE"
-      OSIZE=$(wc -c $TFILE | cut -d' ' -f1)
-
-      if [[ $ISIZE -ne $OSIZE ]] ; then
-        # replace by cleaned version
-        mv "$FILE" "$OFILE"
-        mv "$TFILE" "$FILE"
-        echo ".  cleaned $FILE ..."
-      else
-        # undo cleanup
-        rm "$TFILE"
-      fi
+    echo "found: $SITE: $NBHACKED files!"
+    for FILE in $(cat $INFECTED) ; do
+      remove_from_file "$FILE" "$PATTERN"
     done
   fi
 done
