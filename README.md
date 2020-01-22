@@ -9,8 +9,8 @@ Script to clean up after my Wordpress was hacked
 
 	cd repair_wp_hack
 
-	# check which line was inserted into your HTML/PHP files 
-	# default: <script type='text/javascript' src='https://[hacker-site]/same.js'></script>
+* check which line was inserted into your HTML/PHP files 
+* default: <script type='text/javascript' src='https://[hacker-site]/same.js'></script>
 
 	./cleanup_html.sh [root of your websites] for fixing .html and .php files
 
