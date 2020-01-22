@@ -14,7 +14,11 @@ Script to clean up after my Wordpress was hacked
 
 	./cleanup_html.sh [root of your websites] for fixing .html and .php files
 
-	./cleanup_wp.sh [root of your websites] for fixing Wordpress installation
+	./cleanup_wp.sh [root of your websites] for fixing Wordpress installation -  this will:
+
+	* replace your wp-admin and wp-includes folders with those of a fresh Wordpress install
+	* move your themes and plugins to non-usable folders and replace them by those of a fresh Wordpress install
+	* after this, log in through /wp-admin/ and reinstall the necessary themes and plugins
 
 
 # Valuable articles
@@ -25,7 +29,7 @@ Script to clean up after my Wordpress was hacked
 
 ## Test your site
 
-* https://sitecheck.sucuri.net/ (site keeps a cached version of your site, used a random parameter ?test=7763 afetr the URL to get a new scan)
+* https://sitecheck.sucuri.net/ (site keeps a cached version of your site, used a random parameter ?test=7763 after the URL to get a new scan)
 * http://www.unmaskparasites.com/
 * https://www.virustotal.com/gui/home/url
 
