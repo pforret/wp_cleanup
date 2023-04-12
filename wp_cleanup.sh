@@ -250,7 +250,7 @@ function IO:initialize() {
   script_started_at=$(Tool:time)
   [[ "${BASH_SOURCE[0]:-}" != "${0}" ]] && sourced=1 || sourced=0
   [[ -t 1 ]] && piped=0 || piped=1 # detect if output is piped
-  if [[ $piped -eq 0 ]]; then
+  if [[ $piped -eq 0 && -n $(command -v tput) ]]; then
     txtReset=$(tput sgr0)
     txtError=$(tput setaf 160)
     txtInfo=$(tput setaf 2)
