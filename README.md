@@ -58,7 +58,7 @@ Flags, options and parameters:
     -W|--WP <?>      : [option] WordPress installation folder  [default: .]
     -M|--MULTI <?>   : [option] Multi-site setup: subdomain/subfolder
     <action>         : [choice] action to perform  [options: detect,fix,check,env,update]
-                                  pforret:pforret/wp_cleanup.git
+
 ### TIPS & EXAMPLES
 * use wp_cleanup detect to check if there is an infected WP installation in that folder
   wp_cleanup -W /home/sites/wp_1 detect
