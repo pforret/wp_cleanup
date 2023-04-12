@@ -43,12 +43,21 @@ Script:main() {
       #TIP: use «$script_prefix detect» to check if there is an infected WP installation in that folder
       #TIP:> $script_prefix -W /home/sites/wp_1 detect
       is_wp_installed "$WP" || IO:die "No WordPress installed in folder [$WP]"
-      grep --include="*.php" -lir "eval(" "$WP" \
+      # first check for unreadable files
+      find . -type f ! -readable \
+      | while read -r file ; do
+          IO:alert "# the file '$file' should readable"
+        done
+      [[ $(find . -type f ! -readable) ]] && IO:confirm "Shall I fix this?" && find . -type f ! -readable -exec chmod +r "{}" \;
+
+      # then check for eval( in scripts
+      grep --include="*.php" -lir "eval(" "$WP" 2> /dev/null \
       | while read -r file ; do
           [[ "$file" = */wp-includes/class-json.php ]] && continue
           [[ "$file" = */wp-admin/includes/class-pclzip.php ]] && continue
           IO:alert "'$file' might be infected"
         done
+
       ;;
 
     fix)
