@@ -200,7 +200,7 @@ function copy_missing_subs(){
                cp -r "$folder" "$to/"
              done)
 
-  [[ -n "$copied" ]] && IO:success "Copied from $(basename $from): $copied"
+  [[ -n "$copied" ]] && IO:success "Copied from $(basename "$from"): $copied"
 }
 
 function is_wp_installed(){
@@ -406,7 +406,7 @@ function Tool:throughput() {
   # shellcheck disable=SC2155
   local time_finished=$(Tool:time)
   duration=$(Tool:calc "$time_finished - $time_started")
-  seconds=$(Tool:round $duration)
+  seconds=$(Tool:round "$duration")
   if [[ "$operations" -gt 1 ]] ; then
     if [[ $operations -gt $seconds ]] ; then
       ops=$(Tool:calc "$operations / $duration" )
