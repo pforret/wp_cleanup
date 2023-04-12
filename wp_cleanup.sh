@@ -1,11 +1,4 @@
 #!/usr/bin/env bash
-### ==============================================================================
-### SO HOW DO YOU PROCEED WITH YOUR SCRIPT?
-### 1. define the flags/options/parameters and defaults you need in Option:config()
-### 2. implement the different actions in Script:main() with helper functions
-### 3. implement helper functions you defined in previous step
-### ==============================================================================
-
 ### Created by Peter Forret ( pforret ) on 2023-04-12
 ### Based on https://github.com/pforret/bashew 1.19.3
 script_version="0.0.1" # if there is a VERSION.md in this script's folder, that will have priority over this version number
@@ -21,28 +14,6 @@ install_package=""
 temp_files=()
 
 function Option:config() {
-  ### Change the next lines to reflect which flags/options/parameters you need
-  ### flag:   switch a flag 'on' / no value specified
-  ###     flag|<short>|<long>|<description>
-  ###     e.g. "-v" or "--verbose" for verbose output / default is always 'off'
-  ###     will be available as $<long> in the script e.g. $verbose
-  ### option: set an option / 1 value specified
-  ###     option|<short>|<long>|<description>|<default>
-  ###     e.g. "-e <extension>" or "--extension <extension>" for a file extension
-  ###     will be available a $<long> in the script e.g. $extension
-  ### list: add an list/array item / 1 value specified
-  ###     list|<short>|<long>|<description>| (default is ignored)
-  ###     e.g. "-u <user1> -u <user2>" or "--user <user1> --user <user2>"
-  ###     will be available a $<long> array in the script e.g. ${user[@]}
-  ### param:  comes after the options
-  ###     param|<type>|<long>|<description>
-  ###     <type> = 1 for single parameters - e.g. param|1|output expects 1 parameter <output>
-  ###     <type> = ? for optional parameters - e.g. param|1|output expects 1 parameter <output>
-  ###     <type> = n for list parameter    - e.g. param|n|inputs expects <input1> <input2> ... <input99>
-  ###     will be available as $<long> in the script after option/param parsing
-  ### choice:  is like a param, but when there are limited options
-  ###     choice|<type>|<long>|<description>|choice1,choice2,...
-  ###     <type> = 1 for single parameters - e.g. param|1|output expects 1 parameter <output>
   grep <<< "
 #commented lines will be filtered
 flag|h|help|show usage
@@ -183,6 +154,7 @@ function install_new_wp(){
   rm -fr wordpress
   rm latest.zip
   IO:success "--- Wordpress cleanup was done"
+  IO:confirm "Do you want to compress the infected files?" && zip -qrm  "$backup.zip" "$backup/" && IO:success "old WordPress files in $(basename "$backup.zip")"
   popd > /dev/null || return 1
 
 }
@@ -196,9 +168,10 @@ function copy_missing_subs(){
            | while read -r folder ; do
                base=$(basename "$folder")
                [[ -d "$to/$base" ]] && continue # skip existing sub folders
-               echo "$base "
+               printf "$base "
                cp -r "$folder" "$to/"
-             done)
+             done
+             echo " " )
 
   [[ -n "$copied" ]] && IO:success "Copied from $(basename "$from"): $copied"
 }
