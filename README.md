@@ -1,3 +1,10 @@
+![GH stars](https://img.shields.io/github/stars/pforret/wp_cleanup)
+![GH tag](https://img.shields.io/github/v/tag/pforret/wp_cleanup)
+![Shellcheck CI](https://github.com/pforret/wp_cleanup/workflows/Shellcheck%20CI/badge.svg)
+![GH Language](https://img.shields.io/github/languages/top/pforret/wp_cleanup)
+![GH License](https://img.shields.io/github/license/pforret/wp_cleanup)
+[![basher install](https://img.shields.io/badge/basher-install-white?logo=gnu-bash&style=flat)](https://basher.gitparade.com/package/)
+
 # WP CLEANUP
 
     Script to clean up infected WordPress installations
