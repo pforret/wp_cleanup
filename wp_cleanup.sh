@@ -124,7 +124,7 @@ function move_existing_wp() {
       IO:alert "# the folder '$base' should not be in a WP install"
       echo "$folder"
     done)
-    IO:confirm "Do you want to remove them?" && for folder in $weird_folders ; do rm -fr "$folder" ; IO:success "delete folder [$folder]" ; done
+    [[ "$weird_folders" ]] && IO:confirm "Do you want to remove them?" && for folder in $weird_folders ; do rm -fr "$folder" ; IO:success "delete folder [$folder]" ; done
 }
 
 function install_new_wp() {
