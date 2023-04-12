@@ -15,7 +15,7 @@
 When your WordPress installation has been hacked, and one or more WordPress source code files have been changed.
 The effect could be that
 * your site is still accessible, but when you try to access `/wp-admin` you get an 403 (access denied) error
-* your site is off-line, gives an error 500 (server error), or shows an empty page, or a WordPress error
+* your site is off-line, gives an error 500 (server error), or shows an empty page, or a WordPress error "_There has been a critical error on this website._"
 * your site is still accessible but inserts malicious code that generates popup advertising or redirects to other websites
 
 You should go and check the WordPress files with a SSH console or through an (s)FTP connection. Files that were installed by WordPress might have been changed by malicious code (virus/trojan/infection, whatever you want to call it).

@@ -179,6 +179,7 @@ function copy_missing_subs(){
   local from="$1"
   local to="$2"
   local copied
+  IO:progress "Restoring $(basename "$to")"
   copied=$(find "$from" -maxdepth 1 -mindepth 1 -type d \
            | sort \
            | while read -r folder ; do
