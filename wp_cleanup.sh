@@ -154,7 +154,7 @@ function install_new_wp(){
   IO:success "Wordpress .htaccess set!"
   rm -fr wordpress
   rm latest.zip
-  IO:success "--- Wordpress cleanup was done"
+  IO:success "Wordpress cleanup done"
   IO:confirm "Do you want to compress the infected files?" && zip -qrm  "$backup.zip" "$backup/" && IO:success "old WordPress moved to $(basename "$backup.zip")"
   popd > /dev/null || return 1
 
