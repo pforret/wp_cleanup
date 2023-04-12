@@ -19,7 +19,10 @@ function Option:config() {
 flag|h|help|show usage
 flag|q|quiet|no output
 flag|v|verbose|also show debug messages
-flag|f|force|do not ask for confirmation (always yes)
+flag|f|force|do not ask for confirmation
+flag|P|noplugins|do not copy plugins
+flag|T|nothemes|do not copy themes
+flag|U|nouploads|do not copy uploads
 option|l|log_dir|folder for log files |$HOME/.$script_prefix/log
 option|t|tmp_dir|folder for temp files|$HOME/.$script_prefix/tmp
 option|W|WP|WordPress installation folder|.
@@ -156,10 +159,15 @@ function install_new_wp() {
   IO:success "Wordpress system restored!"
 
   IO:progress "WP restore config  "
-  copy_missing_subs "$backup/wp-content/themes" "wp-content/themes"
-  copy_missing_subs "$backup/wp-content/plugins" "wp-content/plugins"
-  [[ ! -d "wp-content/uploads" ]] && mkdir "wp-content/uploads"
-  [[ -d "$backup/wp-content/uploads" ]] && copy_missing_subs "$backup/wp-content/uploads" "wp-content/uploads"
+  # shellcheck disable=SC2154
+  ((nothemes)) || copy_missing_subs "$backup/wp-content/themes" "wp-content/themes"
+  # shellcheck disable=SC2154
+  ((noplugins)) || copy_missing_subs "$backup/wp-content/plugins" "wp-content/plugins"
+  # shellcheck disable=SC2154
+  ((nouploads)) || (
+    [[ ! -d "wp-content/uploads" ]] && mkdir "wp-content/uploads"
+    [[ -d "$backup/wp-content/uploads" ]] && copy_missing_subs "$backup/wp-content/uploads" "wp-content/uploads"
+  )
   cp "$backup/wp-config.php" .
   IO:success "Wordpress settings copied!"
   if [[ -n "$MULTI" ]]; then
