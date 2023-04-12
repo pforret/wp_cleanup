@@ -12,29 +12,25 @@
 ![](assets/cleanup.jpg)
 
 ## When to use this
-When your WordPress installation has been hacked, and one or more WordPress scripts have been changed.
+When your WordPress installation has been hacked, and one or more WordPress source code files have been changed.
+The effect could be that
+* your site is still accessible, but when you try to access `/wp-admin` you get an 403 (access denied) error
+* your site is off-line, gives an error 500 (server error), or shows an empty page, or a WordPress error
+* your site is still accessible but inserts malicious code that generates popup advertising or redirects to other websites
+
+You should go and check the WordPress files with a SSH console or through an (s)FTP connection. Files that were installed by WordPress might have been changed by malicious code (virus/trojan/infection, whatever you want to call it).
 
 A typical example is the `./index.php` file. Normally it should only contain
 ```php
 <?php
 /**
- * Front to the WordPress application. This file doesn't do anything, but loads
- * wp-blog-header.php which does and tells WordPress to load the theme.
- * @package WordPress
- */
-
-/**
- * Tells WordPress to load the WordPress theme and output it.
- *
- * @var bool
+   comments don't really matter, there are only 2 lines of real code to be executed 
  */
 define( 'WP_USE_THEMES', true );
-
-/** Loads the WordPress Environment and Template */
 require __DIR__ . '/wp-blog-header.php';
 ```
 
-Some viruses insert extra code:
+Some viruses insert extra code in to `index.php`:
 ```php
 <?php
  $PxzcQOgNk = function($jWC9KOqRQtX9 ,$MDafuOVYz) {
@@ -44,6 +40,8 @@ return $lKnbe;
 (...)
 evAL($XG51n);; ?><?php  define('WP_USE_THEMES', true );require(__DIR__.  '/wp-blog-header.php' ); ?>
 ```
+
+They might also create new files (like `admin.php`, which sounds official, but is not part of a normal WP installation), or new folders (like `psp/`, which again in not part of a normal WP installation).
 
 What you want to do in this case, is restore all WordPress source code files to their original state.
 This is what this script does.
