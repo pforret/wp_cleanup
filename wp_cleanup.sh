@@ -108,8 +108,8 @@ function move_existing_wp(){
   | while read -r folder ; do
       base=$(basename "$folder")
       [[ "$base" =~ _infected.* ]] && continue
-      IO:alert "# this folder should not be in a WP install -- remove it!"
-      IO:alert "# rm -fr '$folder'"
+      IO:alert "# the folder '$base' should not be in a WP install"
+      IO:confirm "Do you want to remove it?" && rm -fr "$folder"
     done
 }
 
