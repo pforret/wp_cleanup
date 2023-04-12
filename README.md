@@ -1,5 +1,7 @@
-# repair_wp_hack
-Script to clean up after my Wordpress was hacked
+# WP CLEANUP
+Script to clean up infected WordPress installations
+
+![](assets/cleanup.jpg)
 
 ## Installation 
 * log in to your hacked server (via ssh)

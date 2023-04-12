@@ -1,6 +1,8 @@
-latest.zip
-wordpress/*
 *.tmp
-temp/
-tmp/
+.idea/
 cache/
+latest.zip
+temp/
+test/
+tmp/
+wordpress/*
