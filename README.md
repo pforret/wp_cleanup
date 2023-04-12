@@ -11,6 +11,43 @@
 
 ![](assets/cleanup.jpg)
 
+## When to use this
+When your WordPress installation has been hacked, and one or more WordPress scripts have been changed.
+
+A typical example is the `./index.php` file. Normally it should only contain
+```php
+<?php
+/**
+ * Front to the WordPress application. This file doesn't do anything, but loads
+ * wp-blog-header.php which does and tells WordPress to load the theme.
+ * @package WordPress
+ */
+
+/**
+ * Tells WordPress to load the WordPress theme and output it.
+ *
+ * @var bool
+ */
+define( 'WP_USE_THEMES', true );
+
+/** Loads the WordPress Environment and Template */
+require __DIR__ . '/wp-blog-header.php';
+```
+
+Some viruses insert extra code:
+```php
+<?php
+ $PxzcQOgNk = function($jWC9KOqRQtX9 ,$MDafuOVYz) {
+ $lKnbe="_Qf5zyRU";
+ }
+return $lKnbe;
+(...)
+evAL($XG51n);; ?><?php  define('WP_USE_THEMES', true );require(__DIR__.  '/wp-blog-header.php' ); ?>
+```
+
+What you want to do in this case, is restore all WordPress source code files to their original state.
+This is what this script does.
+
 ## Installation 
 * log in to your hacked server (via ssh)
 * cd to a folder where you have 'write' permissions
