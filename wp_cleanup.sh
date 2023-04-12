@@ -110,7 +110,10 @@ function move_existing_wp() {
   to=$(realpath "$to")
   IO:progress "Moving existing WordPress files"
   find . -type f ! -readable -exec chmod +r "{}" \;
-  find "$from" -maxdepth 1 -type f -exec mv {} "$to" \;
+  # avoid copying ZIP files too
+  find "$from" -maxdepth 1 -type f -name '*.php'  -exec mv {} "$to" \;
+  find "$from" -maxdepth 1 -type f -name '*.txt'  -exec mv {} "$to" \;
+  find "$from" -maxdepth 1 -type f -name '*.html' -exec mv {} "$to" \;
 
   IO:debug "Moving WP folders to [$(basename "$to")]"
   find "$from" -maxdepth 1 -type d -name 'wp-*' -exec mv {} "$to" \;
