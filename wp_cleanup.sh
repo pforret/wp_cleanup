@@ -283,7 +283,7 @@ function IO:debug() {
 
 function IO:die() {
   IO:print "${txtError}${char_fail} $script_basename${txtReset}: $*" >&2
-  tput bel
+  [[ $(command -v tput ) ]] && tput bel
   Script:exit
 }
 
