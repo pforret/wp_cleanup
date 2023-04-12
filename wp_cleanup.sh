@@ -91,18 +91,19 @@ function move_existing_wp(){
   from=$(realpath "$from")
   to=$(realpath "$to")
   IO:progress "Moving existing WordPress files"
-  find "$from" -maxdepth 1 -type f -exec mv {} "$2" \;
+  find "$from" -maxdepth 1 -type f -exec mv {} "$to" \;
 
-  IO:debug "Moving WP folders to [$2]"
-  find "$from" -maxdepth 1 -type d -name 'wp-*' -exec mv {} "$2" \;
+  IO:debug "Moving WP folders to [$(basename "$to")]"
+  find "$from" -maxdepth 1 -type d -name 'wp-*' -exec mv {} "$to" \;
   [[ -d "$from/wordpress" ]] && rm -fr "$from/wordpress"
+  IO:success "WordPress installation moved to [$(basename "$to")]"
 
-  IO:success "WordPress installation moved to [$to]"
   find "$from" -maxdepth 1 -mindepth 1 -type d \
   | while read -r folder ; do
       base=$(basename "$folder")
       [[ "$base" =~ _infected.* ]] && continue
-      IO:alert "[$base]: this folder should not exist in a WordPress installation"
+      IO:alert "# this folder should not be in a WP install -- remove it!"
+      IO:alert "# rm -fr '$folder'"
     done
 }
 
@@ -154,7 +155,7 @@ function install_new_wp(){
   rm -fr wordpress
   rm latest.zip
   IO:success "--- Wordpress cleanup was done"
-  IO:confirm "Do you want to compress the infected files?" && zip -qrm  "$backup.zip" "$backup/" && IO:success "old WordPress files in $(basename "$backup.zip")"
+  IO:confirm "Do you want to compress the infected files?" && zip -qrm  "$backup.zip" "$backup/" && IO:success "old WordPress moved to $(basename "$backup.zip")"
   popd > /dev/null || return 1
 
 }

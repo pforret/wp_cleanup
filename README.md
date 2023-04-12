@@ -19,7 +19,9 @@
 git clone https://github.com/pforret/wp_cleanup
 cd wp_cleanup
 ./wp_cleanup -W [WP folder] fix
-✅  WordPress installation moved to [.../_infected.20230412_1634]
+✅  WordPress installation moved to [_infected.20230412_1643]
+✴️: # this folder should not be in a WP install -- remove it!
+✴️: # rm -fr '.../unusualdir'
 ✅  Wordpress 6.2 downloaded!
 ✅  Wordpress system restored!
 ✅  Copied from themes: testtheme  
@@ -28,7 +30,7 @@ cd wp_cleanup
 ✅  Wordpress .htaccess set!
 ✅  --- Wordpress cleanup was done
 Do you want to compress the infected files? [y/N] Y 
-✅  old WordPress files in _infected.20230412_1634.zip
+✅  old WordPress moved to _infected.20230412_1643.zip
 ```
 
 This will
