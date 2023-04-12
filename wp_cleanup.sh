@@ -164,18 +164,25 @@ function install_new_wp(){
   mv wordpress/*.php .
   mv wordpress/*.txt .
   mv wordpress/*.html .
+  IO:success "Wordpress system restored!"
 
-  IO:progress "WP copy from backup  "
-  copy_missing_subs "$backup/wp-content/themes" wp-content/themes
-  copy_missing_subs "$backup/wp-content/plugins" wp-content/plugins
+  IO:progress "WP restore config  "
+  copy_missing_subs "$backup/wp-content/themes" "wp-content/themes"
+  copy_missing_subs "$backup/wp-content/plugins" "wp-content/plugins"
+  [[ ! -d "wp-content/uploads" ]] && mkdir "wp-content/uploads"
+  [[ -d "$backup/wp-content/uploads" ]] && copy_missing_subs "$backup/wp-content/uploads" "wp-content/uploads"
   cp "$backup/wp-config.php" .
+  IO:success "Wordpress settings copied!"
   if [[ -n "$MULTI" ]] ; then
     [[ ! -f  "$script_install_folder/files/$MULTI.htaccess" ]] && IO:die "$MULTI can only be subfolder/sudomain"
     cp "$script_install_folder/files/$MULTI.htaccess" .htaccess
   else
     cp "$script_install_folder/files/simple.htaccess" .htaccess
   fi
-  IO:success "Wordpress cleanup was done"
+  IO:success "Wordpress .htaccess set!"
+  rm -fr wordpress
+  rm latest.zip
+  IO:success "--- Wordpress cleanup was done"
   popd > /dev/null || return 1
 
 }
@@ -183,13 +190,17 @@ function install_new_wp(){
 function copy_missing_subs(){
   local from="$1"
   local to="$2"
-  find "$from" -maxdepth 1 -mindepth 1 -type d \
-  | while read -r folder ; do
-      base=$(basename "$folder")
-      [[ -d "$to/$base" ]] && continue # skip existing sub folders
-      IO:debug "copy folder $base to $to"
-      cp -r "$folder" "$to/"
-    done
+  local copied
+  copied=$(find "$from" -maxdepth 1 -mindepth 1 -type d \
+           | sort \
+           | while read -r folder ; do
+               base=$(basename "$folder")
+               [[ -d "$to/$base" ]] && continue # skip existing sub folders
+               echo "$base "
+               cp -r "$folder" "$to/"
+             done)
+
+  [[ -n "$copied" ]] && IO:success "Copied from $(basename $from): $copied"
 }
 
 function is_wp_installed(){
