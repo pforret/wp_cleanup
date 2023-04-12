@@ -169,7 +169,7 @@ function copy_missing_subs(){
            | while read -r folder ; do
                base=$(basename "$folder")
                [[ -d "$to/$base" ]] && continue # skip existing sub folders
-               printf "$base "
+               printf "%s " "$base"
                cp -r "$folder" "$to/"
              done
              echo " " )
