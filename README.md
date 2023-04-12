@@ -41,8 +41,40 @@ This will
 * recover your original `wp-content`: themes,plugins,uploads
 * reset your `.htaccess` file
 
+## Usage
 
-# Valuable articles
+```
+Program : wp_cleanup  by peter@forret.com
+Version : v0.1.5 (2023-04-12 16:49)
+Purpose : clean up infected WordPress installations
+Usage   : wp_cleanup [-h] [-q] [-v] [-f] [-l <log_dir>] [-t <tmp_dir>] [-W <WP>] [-M <MULTI>] <action>
+Flags, options and parameters:
+    -h|--help        : [flag] show usage [default: off]
+    -q|--quiet       : [flag] no output [default: off]
+    -v|--verbose     : [flag] also show debug messages [default: off]
+    -f|--force       : [flag] do not ask for confirmation (always yes) [default: off]
+    -l|--log_dir <?> : [option] folder for log files   [default: /home/pforret/.wp_cleanup/log]
+    -t|--tmp_dir <?> : [option] folder for temp files  [default: /home/pforret/.wp_cleanup/tmp]
+    -W|--WP <?>      : [option] WordPress installation folder  [default: .]
+    -M|--MULTI <?>   : [option] Multi-site setup: subdomain/subfolder
+    <action>         : [choice] action to perform  [options: detect,fix,check,env,update]
+                                  pforret:pforret/wp_cleanup.git
+### TIPS & EXAMPLES
+* use wp_cleanup detect to check if there is an infected WP installation in that folder
+  wp_cleanup -W /home/sites/wp_1 detect
+* use wp_cleanup fix to run the cleanup (reinstall WP)
+  wp_cleanup -W /home/sites/wp_1 fix
+* use wp_cleanup check to check if this script is ready to execute and what values the options/flags are
+  wp_cleanup check
+* use wp_cleanup env to generate an example .env file
+  wp_cleanup env > .env
+* use wp_cleanup update to update to the latest version
+  wp_cleanup update
+* >>> bash script created with pforret/bashew
+* >>> for bash development, also check IO:print pforret/setver and pforret/IO:progressbar
+```
+
+## Valuable articles
 * [RESOLVED: cutwin Javascript injection (WordPress)](https://wordpress.org/support/topic/resolved-cutwin-javascript-injection/)
 * [FAQ My site was hacked (WordPress)](https://wordpress.org/support/article/faq-my-site-was-hacked/)
 * [Removing Malicious Redirects From Your Site (WordFence)](https://www.wordfence.com/learn/removing-malicious-redirects-site/)
